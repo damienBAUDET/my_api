@@ -40,6 +40,7 @@ class Post
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post")
+     * @Groups("post:read")
      */
     private $comments;
 
