@@ -57,4 +57,23 @@ class ApiPostController extends AbstractController
             ], 400);
         }
     }
+
+    /**
+     * @Route("/api/post/{id}", name="api_post_edit", methods={"PATCH"})
+     */
+    public function edit(Request $request, Post $post, SerializerInterface $serializer, EntityManagerInterface $em) {
+
+        $jsonRecu = $request->getContent();
+
+        $newPost = $serializer->deserialize($jsonRecu, Post::class, 'json');
+
+        if(!is_null($newPost->getTitle()) || !empty($newPost->getTitle())) {
+            $post->setTitle($newPost->getTitle());
+        }
+
+        $em->persist($post);
+        $em->flush();
+
+        return $this->json($post, 201, [], ['groups' => 'post:read']);
+    }
 }
